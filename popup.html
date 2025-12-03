@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=520, initial-scale=1" />
+    <title>JobSnap - Job Application Tracker</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+        :root {
+            --success: #22c55e;
+            --success-hover: #15803d;
+            --success-darker: #7c3aed; /* Deep Violet for AI Button */
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        /* All your original CSS preserved with minor modern upgrades for flex/alignment and accessibility */
+        .license-hero {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .license-hero h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            background: linear-gradient(90deg, var(--primary), #0ea5e9 60%, #a0e9ff 100%);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 4.5s linear infinite;
+            margin: 0;
+        }
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .license-hero .tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            color: var(--text-light);
+            margin: 8px 0 20px 0;
+            font-weight: 500;
+            opacity: 0.85;
+        }
+        .dark-mode .license-hero .tagline {
+            color: var(--text-dark);
+            opacity: 0.75;
+        }
+        .section-text {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .dark-mode .section-text {
+            color: #94a3b8;
+        }
+        .new-user-heading {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+        .dark-mode .new-user-heading {
+            color: #fff;
+        }
+        #licenseInput {
+            width: 80%;
+            padding: 8px 10px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+        }
+        #verifyLicenseBtn {
+            padding: 8px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-weight: 600;
+            color: #fff;
+            background-color: var(--primary);
+            transition: background-color 0.3s ease;
+        }
+        #verifyLicenseBtn:hover {
+            background-color: var(--primary-hover);
+        }
+        #licenseError {
+            color: #ef4444;
+            margin-top: 8px;
+            display: none;
+        }
+        #premiumFeatures {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f8ff 0%, #e0e7ff 100%);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.1), 0 4px 12px rgba(37, 99, 235, 0.06);
+            display: none;
+        }
+        .dark-mode #premiumFeatures {
+            background: linear-gradient(135deg, #23263a 0%, #1e293b 100%);
+            box-shadow: 0 12px 30px rgba(96, 165, 250, 0.1), 0 4px 12px rgba(96, 165, 250, 0.06);
+        }
+        #premiumFeatures h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+        .dark-mode #premiumFeatures h3 {
+            color: #60a5fa;
+        }
+        .features-list {
+            list-style: disc inside;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: #1e293b;
+            margin-bottom: 15px;
+            padding-left: 0;
+            font-weight: 400;
+            line-height: 1.8;
+        }
+        .dark-mode .features-list {
+            color: #ccc;
+        }
+        #payUnlockBtn {
+            background-color: var(--success);
+            color: #fff;
+            margin-top: 10px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        #payUnlockBtn:hover {
+            background-color: var(--success-hover);
+            transform: translateY(-2px);
+        }
+        .additional-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .additional-buttons button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .additional-buttons button:hover {
+            background: var(--primary-hover);
+            color: #fff;
+        }
+        .license-page-separator {
+            margin: 20px 0;
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+        }
+        .dark-mode .license-page-separator {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+        }
+        .header-inline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: sticky; 
+            top: 0;
+            z-index: 1000;
+            background: var(--bg-light);
+            padding-bottom: 6px;
+            padding-left: 16px; 
+            padding-right: 16px;
+        }
+        .dark-mode .header-inline {
+            background: var(--bg-dark);
+        }
+        /* CRITICAL FIX: Motivation Line style update */
+        .motivation-line {
+            font-size: 13.5px !important;
+            font-weight: 550 !important;
+            letter-spacing: 0.06em;
+            font-family: 'Outfit', 'Poppins', sans-serif;
+            line-height: 1.35;
+            text-align: center;
+            
+            /* LIGHT MODE FIX: Ensure this is the only background applied in light mode */
+            background: linear-gradient(90deg, #f5f8ff 0%, #e0e7ff 100%) !important;
+            border: 3px solid #2563eb; /* Directly using your strong primary blue */
+            color: var(--text-light) !important;
+
+            border-radius: 10px;
+            box-shadow: 0 2px 7px rgba(37, 99, 235, 0.09);
+            margin: 8px auto 8px auto;
+            padding: 6px 7px;
+            max-width: 280px;
+            min-height: unset;
+            position: relative;
+            white-space: pre-wrap;
+            word-break: break-word;
+            transition: border-color 0.15s;
+        }
+        /* Dark mode styles override the light styles above */
+        .dark-mode .motivation-line {
+            background: linear-gradient(90deg, #23263a 0%, #1e293b 100%) !important;
+            border: 3px solid #7c3aed; 
+            box-shadow: 0 2px 7px 0 rgba(76, 29, 149, 0.09);
+            animation: none;
+            color: var(--text-dark) !important;
+        }
+        /* End Critical Fix */
+        
+        .dark-mode .motivation-line h2 {
+            color: #fff;
+        }
+        .dark-mode .motivation-line > div {
+            color: var(--text-dark);
+            background: transparent;
+            border: none;
+        }
+        #trialCountdown {
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            color: var(--text-light);
+        }
+        .dark-mode #trialCountdown {
+            color: var(--text-dark);
+        }
+
+        /* --- NEW ANALYTICS STYLES (Existing) --- */
+        .analytics-container {
+            /* Ensures grid and charts containers are positioned correctly */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            /* Removed margin-left: 50px; as sidebar is no longer full height */
+            width: 100%;
+            margin-left: 0;
+            padding: 10px 0;
+        }
+        #analyticsPageContent {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .metric-card {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s;
+        }
+        .dark-mode .metric-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.1);
+        }
+        .metric-card .metric-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .dark-mode .metric-card .metric-value {
+            color: #60a5fa;
+        }
+        .metric-card .metric-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+        }
+        .dark-mode .metric-card .metric-label {
+            color: #a0a0a0;
+        }
+        
+        /* New Styling for Visual Hierarchy and Comparison */
+        .metric-card.attention-needed {
+            border: 2px solid var(--warning);
+            background: #fffbe6;
+        }
+        .dark-mode .metric-card.attention-needed {
+            border-color: var(--warning);
+            background: #2b200d;
+        }
+        .metric-card.attention-needed .metric-value {
+            color: var(--warning);
+        }
+        .metric-card.success-metric .metric-value {
+            color: var(--success); /* Green for high conversion */
+        }
+        .dark-mode .metric-card.success-metric .metric-value {
+             color: #4ade80; 
+        }
+
+        /* Comparison Icons */
+        .metric-card .metric-value .diff {
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+            vertical-align: top;
+            padding: 2px 5px;
+            border-radius: 4px;
+            display: inline-block;
+            line-height: 1;
+        }
+        .metric-card .metric-value .diff-up {
+            color: var(--success);
+            background: rgba(34, 197, 94, 0.1);
+        }
+        .metric-card .metric-value .diff-down {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .metric-card .metric-value .diff-down, .metric-card .metric-value .diff-up {
+            font-size: 11px;
+        }
+        
+        /* Recommendation Box */
+        .recommendations-box {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+            display: block;
+        }
+        .dark-mode .recommendations-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b0764 100%);
+            border-color: #60a5fa;
+            color: #fff;
+        }
+        .recommendations-box h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .dark-mode .recommendations-box h3 {
+             color: #60a5fa;
+        }
+        .recommendations-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .recommendations-box li {
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        .dark-mode .recommendations-box li {
+             color: #e0f2fe;
+        }
+        .recommendations-box li::before {
+            content: "•";
+            color: #3b82f6; 
+            font-weight: 900;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        .dark-mode .recommendations-box li::before {
+             color: #93c5fd;
+        }
+
+
+        /* --- CHART VISUALIZATION COMPONENTS (Source, Excitement, Weekly) --- */
+        .chart-section {
+            width: 100%;
+            padding: 0 5px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin: 10px 0 10px 0;
+            padding-left: 5px;
+        }
+        .dark-mode .chart-title {
+            color: var(--text-dark);
+        }
+
+        .visual-chart {
+            width: 100%;
+            padding: 10px;
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .dark-mode .visual-chart {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        /* Horizontal Bar Chart (used for Rating/Activity) */
+        .horizontal-bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .h-bar-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .h-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .h-bar-visualization {
+            height: 12px;
+            width: 100%;
+            background: var(--hover-light);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .h-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease-out;
+        }
+
+        /* Funnel Chart (Stacked Bar Look) */
+        .funnel-chart {
+            width: 100%;
+            margin-top: 15px;
+            padding: 0 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .funnel-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .funnel-bar-container {
+            width: 100%;
+            background: var(--border-light);
+            border-radius: 4px;
+            height: 30px; 
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .funnel-bar {
+            height: 100%;
+            display: flex; 
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-weight: 600;
+            font-size: 11px;
+            color: white;
+            transition: width 0.5s ease-out; 
+            min-width: 0%; 
+        }
+
+        /* Funnel Stage Colors */
+        .stage-applied { background: var(--primary); }
+        .stage-shortlisted { background: var(--info); }
+        .stage-interviewed { background: var(--success); }
+        .stage-offer { background: var(--warning); }
+        .stage-rejected { background: var(--danger); }
+
+        .funnel-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-light);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .dark-mode .funnel-label {
+            color: var(--text-dark);
+        }
+        .funnel-label .count {
+            font-weight: 700;
+            color: var(--primary-hover);
+        }
+        .dark-mode .funnel-label .count {
+            color: #60a5fa;
+        }
+
+        /* ---------------------------------------------------------------------------------- */
+        /* --- NEW CAREER INTEL PAGE STYLES (UPDATED FOR HORIZONTAL SLIDER) --- */
+        /* ---------------------------------------------------------------------------------- */
+
+        /* 1. Base Container for the Slider */
+        #intelInsightsContainer {
+            /* Critical: must be relative for absolute nav buttons */
+            position: relative !important; 
+            overflow: hidden !important; 
+            padding: 10px 0 !important;
+        }
+
+        /* 2. Horizontal Wrapper (Handles the actual sliding) */
+        #intelSliderWrapper {
+            display: flex;
+            overflow-x: hidden; /* Controlled by JS */
+            scroll-snap-type: x mandatory; /* Snap to each card */
+            width: 100%;
+            height: auto;
+            padding: 0 10px; /* Padding for visual space */
+            box-sizing: content-box; /* Ensure padding doesn't affect width calculation */
+            /* REMOVED: scroll-behavior: smooth; -> Now controlled by JS for custom duration */
+        }
+
+        /* 3. Navigation Buttons (Semi-transparent, centered vertically) */
+        .slider-nav-btn {
+            position: absolute;
+            /* CRITICAL FIX: Positioning from the top, centered vertically */
+            top: 50%;
+            /* CRITICAL FIX: Shift up by half their height to vertically center them correctly */
+            transform: translateY(-50%); 
+            
+            z-index: 10;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.5); /* Dark, semi-transparent background */
+            color: white;
+            /* Increased size slightly for better tap/click target */
+            font-size: 20px; 
+            border: none;
+            cursor: pointer;
+            border-radius: 50%; /* Circular buttons */
+            /* Increased width/height for better visibility */
+            width: 45px; 
+            height: 45px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Initially hide buttons, fade in on container hover (JS handles opacity on hover) */
+            opacity: 0; 
+            transition: background-color 0.2s, opacity 0.3s, transform 0.2s;
+        }
+
+        /* Hover over the container to make the buttons appear */
+        #intelInsightsContainer:hover .slider-nav-btn {
+            opacity: 1; 
+        }
+
+
+        /* Adjusted placement to be clear of the card edge */
+        .slider-nav-btn.prev-btn { 
+            left: 15px;
+        }
+        .slider-nav-btn.next-btn { 
+            right: 15px;
+        }
+
+        .slider-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .dark-mode .slider-nav-btn {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .dark-mode .slider-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+
+        /* 4. Segment Card (Each Segment is now a full-screen, horizontal card) */
+        .insight-segment {
+            /* Critical: Each segment takes the full width and shrinks to prevent wrapping */
+            flex: 0 0 calc(100% - 20px); /* 100% minus total horizontal margin/padding */
+            scroll-snap-align: start; /* Changed from center to start for smoother scrolling behavior control by JS */
+            
+            margin: 5px 10px; /* Space between cards */
+            padding: 24px 20px; /* INCREASE vertical and horizontal padding for more breathing room */
+            
+            /* PREMIUM UI / MINIMALIST LOOK */
+            border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle, light border for minimal look */
+            border-radius: 20px; /* Slightly softer corners */
+            background: var(--card-light); 
+            /* Subtle Shadow for floating effect */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05),
+                        0 10px 30px rgba(0, 0, 0, 0.05); 
+            transition: all 0.3s ease-in-out;
+            
+            /* Ensure internal content is scrollable if needed */
+            overflow-y: auto; 
+            max-height: 480px; /* Limit height for slider context */
+            min-height: 300px; /* Ensure content box is visible */
+        }
+
+        .dark-mode .insight-segment {
+            border: 1px solid var(--border-dark); /* Keep light border for definition */
+            background: #1e1e1e; /* Pure dark background */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4),
+                        0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        /* --- Section Title (e.g., "REGIONAL INTERNSHIPS") --- */
+        .segment-title {
+            font-size: 17px; /* Slightly larger */
+            font-weight: 700;
+            padding: 0 0 8px 0; /* Increased bottom padding */
+            border-bottom: 2px solid var(--primary); /* Stronger divider line */
+            margin-top: 0;
+            margin-bottom: 15px; /* Increased separation from content */
+            color: var(--primary);
+        }
+        .dark-mode .segment-title {
+            color: var(--primary-hover);
+            border-bottom-color: var(--primary-hover);
+        }
+
+        /* 5. Insight Item Styling (Premium/Apple-like look) */
+
+        .insight-item {
+            padding: 15px 0; /* Vertical flow within the segment */
+            border-bottom: 1px solid var(--border-light);
+            transition: none;
+            transform: none !important; 
+            box-shadow: none !important;
+            opacity: 1; /* Override slideUpAndFade animation */
+            animation: none !important; 
+            align-items: flex-start; /* Ensure icon and text are aligned to the top */
+        }
+
+        .dark-mode .insight-item {
+            border-bottom-color: var(--border-dark);
+            background: none !important;
+        }
+
+        /* Icon Coloration remains */
+        .insight-icon.icon-data { color: #f59e0b; }
+        .insight-icon.icon-tech { color: #3b82f6; }
+        .insight-icon.icon-career { color: #10b981; }
+        .insight-icon.icon-strategy { color: #7c3aed; }
+
+
+        /* --- Item Title (e.g., "Tier-2 Internship Access & Relocation") --- */
+        .insight-content strong {
+            font-size: 17px; /* Prominent size, slightly reduced for sleekness */
+            font-weight: 700;
+            letter-spacing: 0.01em; /* Subtle spacing for editorial feel */
+            color: var(--text-light); /* Ensuring the darkest text color */
+            display: flex; 
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 8px; /* Spacing below the title text */
+            background-color: transparent !important; 
+            padding: 0 !important;
+        }
+        .dark-mode .insight-content strong {
+            color: var(--text-dark); /* Pure white text in dark mode */
+        }
+
+        /* --- DETAIL TEXT: The body of the content --- */
+        .insight-content .detail-text {
+            font-size: 13px; /* Slightly reduced for a cleaner look */
+            color: #333c53; /* Deep, nearly black color for main body text in light mode */
+            line-height: 1.5;
+            margin: 6px 0 22px 0; /* INCREASED GAP: Ample separation before Action Tip */
+        }
+        .dark-mode .insight-content .detail-text {
+            color: #cccccc; /* Clear light gray in dark mode */
+        }
+
+        /* --- TITLE PULSE ANIMATION --- */
+        @keyframes title-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pulse-title {
+            animation: title-pulse 0.4s ease-out 1;
+            display: inline-block;
+        }
+        /* ------------------------------------------- */
+
+
+        /* ------------------ ACTION TIP STYLING (CRITICAL) ------------------ */
+
+        .insight-content .action-tip-highlight {
+            font-size: 13px;
+            font-weight: 600; /* Slightly reduced weight for the main text inside */
+            
+            /* HIGHLIGHT COLOR: Use the vibrant Violet for maximum attention */
+            background: #93c5fd; /* Light Blue/Violet Background */
+            color: var(--text-light); /* Dark text on light background */
+            
+            /* IMPROVE PADDING & BORDER */
+            padding: 12px 15px !important; /* Generous padding */
+            border-radius: 12px !important; /* Softer radius */
+            margin-top: 15px !important; 
+            margin-bottom: 18px !important; /* INCREASED GAP: More space above button */
+            
+            display: block;
+            word-break: break-word;
+            line-height: 1.5;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2); 
+            animation: pulse-shadow 2.5s infinite;
+        }
+
+        /* Custom styling for the "**Action:**" prefix inside the tip */
+        .insight-content .action-tip-highlight strong {
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            color: #5b21b6; /* Deep Violet for the emphasized word */
+            background: none !important;
+            padding: 0 !important;
+            display: inline !important;
+        }
+
+        .dark-mode .insight-content .action-tip-highlight {
+            background: #4c1d95; /* Deep purple background */
+            color: #e0f2fe !important; /* Light text on dark background */
+            box-shadow: 0 2px 10px rgba(147, 51, 234, 0.3);
+        }
+        .dark-mode .insight-content .action-tip-highlight strong {
+            color: #fff !important; /* Pure white for the emphasized word */
+        }
+
+        @keyframes pulse-shadow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(124, 58, 237, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+            }
+        }
+
+        /* ------------------ SOURCE BUTTON ALIGNMENT (FINAL FIX) ------------------ */
+
+        .link-button-row {
+            margin-top: 15px; /* FINAL ADJUSTMENT: Ensures ample space between Action Tip and Button */
+            display: flex;
+            justify-content: flex-start; 
+        }
+
+        .insight-content .link-button {
+            /* Set specific styles for the button */
+            display: inline-flex !important; 
+            align-items: center;
+            padding: 8px 16px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+            background-color: var(--info) !important;
+            color: #fff !important;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .insight-content .link-button:hover {
+            background-color: var(--primary-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        /* ---------------------------------------------------------------------------------- */
+        /* --- TRIAL BUTTON ALIGNMENT FIX (PRESERVED) --- */
+        /* ---------------------------------------------------------------------------------- */
+
+        .trial-actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            gap: 10px;
+        }
+
+        /* General style for trial action buttons (overrides default button style slightly) */
+        .trial-actions-row button {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        /* Specific style for the Back button */
+        .trial-actions-row .back-license-btn {
+            background: #e5e7eb;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            flex-grow: 0;
+            min-width: 90px;
+        }
+        .trial-actions-row .back-license-btn:hover {
+            background: #d1d5db;
+            transform: translateY(-1px);
+        }
+        .dark-mode .trial-actions-row .back-license-btn {
+            background: #333;
+            color: #eee;
+            border-color: #555;
+        }
+        .dark-actions-row .back-license-btn:hover {
+            background: #444;
+        }
+
+
+        /* Specific style for the Pay/Unlock button */
+        .trial-actions-row .pay-unlock-btn {
+            background-color: var(--success);
+            color: #fff;
+            border: none;
+            flex-grow: 0;
+            min-width: 150px;
+        }
+        .trial-actions-row .pay-unlock-btn:hover {
+            background-color: var(--success-hover);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* ---------------------------------------------------------------------------------- */
+        /* --- NEW ATS SCORE VISUALIZATION STYLES --- */
+        /* ---------------------------------------------------------------------------------- */
+
+        .score-gauge-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0 20px 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 15px;
+        }
+        .dark-mode .score-gauge-wrapper {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .score-dial {
+            /* Base circle properties */
+            position: relative;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            /* Gradient will be set by JS */
+            background: conic-gradient(var(--hover-light) 0deg, var(--hover-light) 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* Ensure smooth transition for the dial itself */
+            transition: background 0.5s ease-in-out; 
+        }
+
+        /* Inner white circle to create the "dial" effect */
+        .score-dial::before {
+            content: '';
+            position: absolute;
+            width: 120px; /* Creates the thickness of the dial */
+            height: 120px;
+            border-radius: 50%;
+            background: var(--card-light);
+            z-index: 1;
+        }
+        .dark-mode .score-dial::before {
+            background: var(--card-dark);
+        }
+
+        .score-number {
+            position: relative;
+            font-size: 32px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: var(--text-light);
+            z-index: 2;
+            transition: color 0.5s ease;
+        }
+        .dark-mode .score-number {
+            color: var(--text-dark);
+        }
+
+        .score-summary-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            padding: 0 10px;
+        }
+        .dark-mode .score-summary-text {
+            color: #9333ea; /* Violet color for summary */
+        }
+
+
+        /* --- DYNAMIC COLOR CLASSES (Set by JavaScript) --- */
+
+        /* Less than 50% - Danger */
+        .score-gauge-danger {
+            color: var(--danger);
+        }
+
+        /* 50% to 75% - Warning */
+        .score-gauge-warning {
+            color: var(--warning);
+        }
+
+        /* 75% and above - Success */
+        .score-gauge-success {
+            color: var(--success);
+        }
+
+        /* Apply color to the text inside the dial */
+        .score-gauge-danger .score-number { color: var(--danger); }
+        .score-gauge-warning .score-number { color: var(--warning); }
+        .score-gauge-success .score-number { color: var(--success); }
+
+        /* --- END DYNAMIC STYLES --- */
+        
+        
+        /* ------------------------------------------------------------- */
+        /* --- NEW ACCORDION / COMPACT CARD STYLES (REQUIRED) --- */
+        /* ------------------------------------------------------------- */
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background: var(--hover-light);
+            color: var(--text-light);
+            transition: background 0.2s, border-left 0.2s;
+            position: relative;
+        }
+        
+        .accordion-header:hover {
+            background: #e0e7ff; /* Light blue/primary hint */
+        }
+
+        .dark-mode .accordion-header {
+            background: var(--hover-dark);
+            color: var(--text-dark);
+        }
+        .dark-mode .accordion-header:hover {
+            background: #2a2a2a;
+        }
+
+        /* Status color indicators for Accordion Headers */
+        .accordion-header.status-critical { border-left: 5px solid var(--danger); color: var(--danger); }
+        .accordion-header.status-warning { border-left: 5px solid var(--warning); color: var(--warning); }
+        .accordion-header.status-good { border-left: 5px solid var(--success); color: var(--success); }
+
+        .accordion-content {
+            padding: 0;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease-in-out;
+            border: 1px solid var(--border-light);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--card-light);
+            margin-bottom: 10px;
+        }
+        .accordion-content.active {
+            max-height: 1000px; /* Large enough value for smooth transition */
+            padding: 15px;
+            border-top: 1px solid var(--border-light);
+        }
+        .dark-mode .accordion-content {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .accordion-header .chevron {
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+        .accordion-header.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Compact Metric Card inside Accordion */
+        .metric-compact-card {
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: var(--hover-light);
+            border-left: 4px solid var(--primary);
+        }
+        .dark-mode .metric-compact-card {
+            background: #23272f;
+            border-left-color: var(--primary-hover);
+        }
+
+        .metric-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 5px;
+        }
+        .dark-mode .metric-header-compact {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-label-video {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .summary-text {
+            font-size: 13px;
+            color: #64748b;
+            margin: 5px 0;
+        }
+        .dark-mode .summary-text {
+            color: #a0a0a0;
+        }
+
+        .action-tip-compact {
+            font-size: 13px;
+            color: var(--primary-hover);
+            margin: 0;
+        }
+
+        .details-toggle-btn {
+            background: none;
+            color: var(--info);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 0;
+            text-align: left;
+            margin-top: 5px;
+            display: block;
+            min-width: unset;
+        }
+        .details-toggle-btn:hover {
+            text-decoration: underline;
+            transform: none;
+            background: none;
+        }
+
+        .details-panel {
+            padding: 10px 0;
+            border-top: 1px dashed var(--border-light);
+            margin-top: 10px;
+        }
+        .details-panel ul {
+            list-style: disc inside;
+            padding-left: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-light);
+        }
+        .dark-mode .details-panel ul {
+            color: var(--text-dark);
+        }
+        .details-panel strong {
+            color: var(--danger);
+        }
+        
+        /* --- NEW STYLES FOR RESOURCE/AUDIT VIEW --- */
+        .resource-tip {
+            border-top: 1px dashed var(--border-light);
+            margin-top: 15px;
+            padding-top: 10px;
+        }
+        .dark-mode .resource-tip {
+            border-top-color: var(--border-dark);
+        }
+        .micro-feedback {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .micro-feedback .feedback-btn {
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: opacity 0.2s;
+            line-height: 1;
+            transform: none !important;
+        }
+        .micro-feedback .feedback-btn:hover {
+            opacity: 0.8;
+        }
+        .micro-feedback .feedback-yes {
+            background: var(--success);
+        }
+        .micro-feedback .feedback-no {
+            background: var(--danger);
+        }
+        .audit-table {
+            font-size: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .dark-mode .audit-table {
+            border-color: var(--border-dark);
+        }
+        .audit-table > div {
+            padding: 8px 10px;
+        }
+        .audit-table .original {
+            color: var(--danger);
+        }
+        .audit-table .rewrite {
+            color: var(--success);
+        }
+        /* END NEW STYLES */
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast-notification" aria-live="polite" aria-atomic="true"></div>
+    
+    <div class="container" role="main">
+        
+        <div id="licensePage" style="display: block;">
+            <div class="license-hero">
+                <h2>Activate J<span class="bounce-ball" aria-hidden="true"></span>bSnap Pro</h2>
+                <p class="tagline">Unlock your career potential with premium features.</p>
+            </div>
+            <p class="section-text">Already a user? Activate by entering your key below.</p>
+            <input type="text" id="licenseInput" placeholder="Enter license key" aria-label="License key input" />
+            <br />
+            <button id="verifyLicenseBtn" type="button" aria-label="Verify license and unlock">Verify & Unlock</button>
+            <p id="licenseError" role="alert" aria-live="assertive"></p>
+            <hr class="license-page-separator" />
+            <p class="section-text">
+                <span class="new-user-heading">New user?</span>
+                <br />
+                Learn about premium features and get your license.
+            </p>
+            <div id="premiumFeatures" aria-live="polite" aria-atomic="true">
+                <h3>🚀 JobSnap Premium Features</h3>
+                <ul class="features-list">
+                    <li>☁ Sync job applications to your browser</li>
+                    <li>🧠 One-click job auto-fill from LinkedIn, Naukri, etc.</li>
+                    <li>📑 Attach resumes & cover letters per job</li>
+                    <li>🔔 Smart job & interview reminders: Get notifications for upcoming deadlines and interviews right when you open Chrome!</li>
+                    <li>📅 Export deadlines/interviews to calendar</li>
+                    <li>📊 Visual dashboard & filters</li>
+                    <li>📥 CSV export, search, and much more!</li>
+                    <li>🌗 Dark Mode Toggle</li>
+                </ul>
+                <button id="payUnlockBtn" type="button" class="primary" aria-label="Pay and unlock premium features">Pay & Unlock Premium</button>
+
+                <div style="color: #64748b; font-size: 13px; margin-top: 10px;">
+                    After payment, you'll receive your license key via email.
+                </div>
+            </div>
+            <div class="additional-buttons">
+                <button id="newUserBtn" type="button" class="trial-btn" aria-label="Learn features and get a license">Learn Features & Get License</button>
+                <button id="tryFreeBtn" type="button" class="trial-btn">⏱️ Start 14-Days Free Trial</button>
+            </div>
+        </div>
+        
+        <div id="mainDashboardSection" style="display: none;" class="main-app-container">
+            
+            <header class="header-inline">
+                <div class="title-row">
+                    <div class="title-area">
+                        <span class="job-snap-title"> J<span class="bounce-ball" aria-hidden="true"></span>bSnap </span>
+                    </div>
+                    
+                    <div class="action-buttons" role="region" aria-label="Theme and controls">
+                        <button id="toggleTheme" type="button" class="header-action-btn compact-btn" aria-pressed="false" aria-label="Toggle dark/light mode">
+                            ☀ <span id="themeLabel">Light Mode</span>
+                        </button>
+                        <button id="autoFill" type="button" class="header-action-btn compact-btn" aria-label="Auto fill job details from tab" style="display: none;">
+                            🧠 Auto-Fill
+                        </button>
+                    </div>
+                    
+                </div>
+                
+                <div class="motivation-line" id="motivationLine"></div>
+                <div id="trialCountdown" aria-live="polite" aria-atomic="true"></div>
+                
+            </header>
+
+            <div class="content-body-with-sidebar">
+                
+                <nav id="fixedSidebar" class="fixed-sidebar-menu" role="navigation">
+                    <div class="sidebar-nav-links">
+                        <button id="navMyJobs" class="nav-btn active" data-page="myJobs">
+                            <span class="icon">📊</span><span class="label">My Jobs</span>
+                        </button>
+                        <button id="navAddJob" class="nav-btn" data-page="addJob">
+                            <span class="icon">📝</span><span class="label">Add Job</span>
+                        </button>
+                        
+                        <button id="navAtsOptimizer" class="nav-btn" data-page="atsOptimizer">
+                            <span class="icon">🤖</span><span class="label">ATS Optimizer</span>
+                        </button>
+                        <button id="navOfferCompare" class="nav-btn" data-page="offerCompare">
+                            <span class="icon">💰</span><span class="label">Offer Compare</span>
+                        </button>
+                        
+                        <button id="navAnalytics" class="nav-btn" data-page="analytics">
+                            <span class="icon">📈</span><span class="label">Analytics</span>
+                        </button>
+                        
+                        <button id="navCareerIntel" class="nav-btn" data-page="careerIntel">
+                            <span class="icon">🧠</span><span class="label">Career Intel</span>
+                        </button>
+                        <button id="navInfo" class="nav-btn" data-page="info">
+                            <span class="icon">💡</span><span class="label">Info & Guide</span>
+                        </button>
+
+                    </div>
+                </nav>
+                
+                <div class="content-wrapper">
+                    
+                    <div id="appContent" class="app-content-panel">
+                        
+                        <div id="myJobsPage" class="content-page active">
+                            <div class="search-container">
+                                <input type="text" id="searchInput" aria-label="Search jobs" placeholder="🔍 Search jobs" autocomplete="off" />
+                                <span id="jobCount" class="counter" aria-live="polite">0 jobs</span>
+                            </div>
+                            <div id="dashboard" class="dashboard" aria-live="polite"></div>
+                            
+                            <div id="list" class="job-list"></div>
+                            
+                            <div id="emptyStateCta" class="empty-state-cta" style="display:none;">
+                                <p>No jobs added yet!</p>
+                                <button id="goToAddJobBtn" class="primary">📝 Add Your First Job</button>
+                            </div>
+                            
+                            <div class="delete-area-premium">
+                                <button id="deletePopupBtn" class="delete-popup-btn">Delete Jobs</button>
+                                <button id="exportCSVBtn" class="export-calendar-btn" style="margin-left: 12px;">📤 Export to CSV</button>
+                            </div>
+                            
+                            <div id="freeTrialMessageMyJobs" class="free-trial-message" style="display:none;">
+                                <p>
+                                    Enjoying the trial? Make it permanent! Get all premium features with a one-time purchase.
+                                </p>
+                                <div class="trial-actions-row"> 
+                                    <button id="backToLicenseBtn" type="button" class="back-license-btn" style="display:none;">← Back</button>
+                                    <button id="payUnlockTrialBtnDashboard" type="button" class="pay-unlock-btn" style="display:none;">Pay & Unlock Premium</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="addJobPage" class="content-page" style="display:none;">
+                            <form id="jobForm" autocomplete="off" novalidate aria-label="Add or edit job">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="company">Company Name</label>
+                                        <input type="text" id="company" autocomplete="organization" placeholder="e.g. Meta" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Job / Internship Title <span aria-hidden="true">*</span></label>
+                                        <input type="text" id="title" required autocomplete="job-title" placeholder="e.g. Cloud Architect" />
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="platform">Platform</label>
+                                        <input type="text" id="platform" autocomplete="off" placeholder="e.g. Remote.co" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dateApplied">Date Applied</label>
+                                        <input type="date" id="dateApplied" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="deadline">Deadline</label>
+                                        <input type="date" id="deadline" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="interviewDate">Interview Date</label>
+                                        <input type="date" id="interviewDate" />
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="status">Application Status</label>
+                                    <select id="status" autocomplete="off">
+                                        <option value="Not Applied">Not Applied</option>
+                                        <option value="Applied">Applied</option>
+                                        <option value="Shortlisted">Shortlisted</option>
+                                        <option value="Interviewed">Interviewed</option>
+                                        <option value="Rejected">Rejected</option>
+                                        <option value="Offer">Offer</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="workType">Work Type</label>
+                                    <select id="workType" autocomplete="off">
+                                        <option value="">Select</option>
+                                        <option value="Remote">Remote</option>
+                                        <option value="In-office">In-office</option>
+                                        <option value="Hybrid">Hybrid</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="rating">How Important is this Job?</label>
+                                    <select id="rating" autocomplete="off">
+                                        <option value="0">⭐ No Rating</option>
+                                        <option value="1">⭐ (Low)</option>
+                                        <option value="2">⭐⭐</option>
+                                        <option value="3">⭐⭐⭐ (Medium)</option>
+                                        <option value="4">⭐⭐⭐⭐</option>
+                                        <option value="5">⭐⭐⭐⭐⭐ (High)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobLink">Job Posting URL</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <input type="url" id="jobLink" autocomplete="off" placeholder="https://" style="flex-grow: 1;" />
+                                        <button type="button" id="getLinkBtn" title="Get current page URL" style="flex-shrink: 0; padding: 0 10px; font-size: 13px; font-weight: 700; background: #60a5fa; color: #fff; line-height: 1; border: none; border-radius: 8px; transition: background-color 0.2s, transform 0.2s;">🔗</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recruiterInfo">Recruiter Contact</label>
+                                    <input type="text" id="recruiterInfo" autocomplete="off" placeholder="Name / Email / Phone" />
+                                </div>
+                                <div class="form-actions" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
+                                    <button type="button" id="saveBtn" class="primary" aria-label="Save job details">💾 Save Job</button>
+                                    <button type="button" id="clearFormBtn" aria-label="Clear all form fields">🔄 Clear All</button>
+                                </div>
+                            </form>
+                            
+                            <div id="freeTrialMessageAddJob" class="free-trial-message" style="display:none;">
+                                <p>
+                                    Enjoying the trial? Make it permanent! Get all premium features with a one-time purchase.
+                                </p>
+                                <div class="trial-actions-row"> 
+                                    <button id="backToLicenseBtnAddJob" type="button" class="back-license-btn" style="display:none;">← Back</button>
+                                    <button id="payUnlockTrialBtnDashboardAddJob" type="button" class="pay-unlock-btn" style="display:none;">Pay & Unlock Premium</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="atsOptimizerPage" class="content-page" style="display:none;">
+                            <div id="atsHeroSection" style="text-align: center; padding: 25px 0 15px 0;">
+                                <h1 style="font-size: 32px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; line-height: 1.1;">
+                                    Smart feedback <br>for your <span style="background: linear-gradient(90deg, var(--primary), #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">dream job</span>
+                                </h1>
+                                <p style="font-size: 16px; color: #64748b; margin: 10px 0 25px 0;">
+                                    Drop your resume for an ATS score and improvement tips
+                                </p>
+                            </div>
+                            
+                            <div id="aiInputCard" style="padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); background: var(--card-light); margin-bottom: 25px;">
+                                <form id="aiForm" autocomplete="off" novalidate aria-label="AI optimization form">
+                                    
+                                    <div class="form-group">
+                                        <label for="aiJobTitle" style="display: none;">Job Title</label>
+                                        <input type="text" id="aiJobTitle" placeholder="Job Title (e.g. Senior Software Engineer)" required /> 
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="notes" style="display: none;">Job Description</label>
+                                        <textarea id="notes" required autocomplete="off" placeholder="Paste Full Job Description Here" rows="8"></textarea> 
+                                    </div>
+                                    
+                                    <div class="form-group" style="margin-bottom: 25px;">
+                                        <label for="resume" style="font-size: 14px; font-weight: 500; margin-bottom: 8px; display: block;">Upload Resume (PDF/DOCX) <span aria-hidden="true">*</span></label>
+                                        <input type="file" id="resume" required accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="border: none; padding: 0;" />
+                                    </div>
+                                    
+                                    <div class="form-group" style="display:none;">
+                                         <input type="file" id="coverLetter" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                                     </div>
+
+                                    <div class="form-actions" style="margin-top: 15px;">
+                                        <button type="button" id="aiOptimizeBtn" class="primary gradient-btn" aria-label="Analyze Resume" style="width: 100%; font-size: 16px; font-weight: 700; padding: 12px; border: none;">
+                                            Analyze Resume
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div id="aiOptimizationOutputCard" class="job-list" style="margin-top: 20px; padding-bottom: 20px; display: none;">
+                                
+                                <div id="atsReportContainer"> 
+                                    
+                                    <button type="button" id="backToInputBtn" class="secondary" style="margin-bottom: 15px;">
+                                        ← Back to Input Form
+                                    </button>
+
+                                    <div class="dual-score-header" id="scoreHeader">
+                                        </div>
+                                    
+                                    <div class="ai-report-details" id="priorityAccordionContainer" style="gap: 12px; display: flex; flex-direction: column;">
+                                        </div>
+                                    
+                                    <button id="saveScoreToJobBtn" class="primary" style="margin-top: 20px; width: 100%; background: var(--success);">
+                                        💾 Save Dual Score to Job Tracker
+                                    </button>
+                                </div>
+                                </div>
+                        </div>
+                        <div id="offerComparePage" class="content-page" style="display:none;">
+                            <h3 class="page-title" style="padding: 10px 0; font-size: 18px;">💰 Offer Comparison Tool</h3>
+                            <div class="analytics-container">
+                                <div style="background: var(--card-light); padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                                    <h3>Multi-Offer Evaluation Matrix</h3>
+                                    <p style="font-size: 14px; color: var(--text-light);">
+                                        Compare up to 3 offers side-by-side based on salary, equity, benefits, and personal priorities.
+                                    </p>
+                                    <button id="startComparisonBtn" type="button" class="primary" style="background-color: #f59e0b;">Start Comparison</button>
+                                </div>
+                                
+                                <div style="background: var(--card-light); padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                                    <h3>Relocation Calculator</h3>
+                                    <p style="font-size: 14px; color: var(--text-light);">
+                                        Find the equivalent salary needed in a new city to maintain your current standard of living.
+                                    </p>
+                                    <button id="calculateSalaryBtn" type="button" class="primary" style="background-color: #14b8a6;">Calculate Real Salary</button>
+                                </div>
+                                
+                                <div style="background: var(--card-light); padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                                    <h3>Negotiation Script Generator</h3>
+                                    <p style="font-size: 14px; color: var(--text-light);">
+                                        Generate professional, data-backed email scripts for negotiating salary, equity, or benefits.
+                                    </p>
+                                    <button id="generateScriptBtn" type="button" class="primary" aria-label="Generate script" style="background-color: #8b5cf6;">Generate Script</button>
+                                </div>
+                                
+                                <div class="recommendations-box" style="grid-column: 1 / -1; margin-left: 0 !important; width: 100% !important;">
+                                    <h3>🚀 Pro Feature: Premium Access Required</h3>
+                                    <ul>
+                                        <li><span style="font-weight: 600;">Data-Driven Decisions:</span> Transform stressful choices into confident, data-backed career moves.</li>
+                                        <li><span style="font-weight: 600;">Confident Negotiation:</span> Use market data and prepared scripts to maximize your compensation.</li>
+                                    </ul>
+                                    <button id="payUnlockOfferPage" type="button" class="pay-unlock-btn" style="background-color: var(--success); margin-top: 10px;">Pay & Unlock Premium</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="analyticsPage" class="content-page" style="display:none;">
+                            <h3 class="page-title" style="padding: 10px 0; font-size: 18px;">📈 Job Search Performance</h3>
+                            
+                            <div class="analytics-container">
+                                <div id="analyticsPageContent">
+                                </div>
+
+                                <div class="chart-section" id="chartsSection">
+                                    
+                                    <h3 class="chart-title">🎯 Pipeline Funnel</h3>
+                                    <div id="funnelVisual" class="funnel-chart">
+                                    </div>
+                                    
+                                    <h3 class="chart-title" style="margin-top: 20px;">🚫 Rejection Analysis by Stage</h3>
+                                    <div id="rejectionAnalysisChart" class="visual-chart"></div>
+                                    <h3 class="chart-title" style="margin-top: 20px;">📍 Source Effectiveness (Interviews Secured by Platform)</h3>
+                                    <div id="sourceRoiChart" class="visual-chart"></div>
+
+                                    <h3 class="chart-title" style="margin-top: 20px;">⭐ Excitement Score Distribution</h3>
+                                    <div id="excitementScoreChart" class="visual-chart"></div>
+
+                                    <h3 class="chart-title" style="margin-top: 20px;">🗓️ Weekly Application Trend</h3>
+                                    <div id="weeklyActivityChart" class="visual-chart"></div>
+
+                                </div>
+                            </div>
+                            
+                            <div id="analyticsEmptyState" style="text-align: center; padding: 40px; color: var(--text-light); display: none;">
+                                <h2>📊 Pipeline Analytics</h2>
+                                <p>No job data is available yet. Start tracking your applications to see performance insights!</p>
+                            </div>
+                        </div>
+                        
+                        <div id="careerIntelPage" class="content-page" style="display:none;">
+                            <h3 class="page-title" id="intelPageTitle" style="padding: 10px 0; font-size: 18px;">
+                                🧠 Career Intel
+                            </h3>
+                            
+                            <div id="intelCategoryLanding" class="analytics-container" style="gap: 20px;">
+                                <h4 style="font-size: 15px; font-weight: 600; color: var(--text-light); text-align: center; width: 100%;">Select Your Career Stage to Get Market Insights</h4>
+                                <div class="delete-options-grid" id="intelCategoryButtons" style="margin-left: 0 !important; width: 100% !important; flex-direction: column; gap: 15px;">
+                                    <button class="intel-category-btn primary" data-category="Student" type="button" style="background-color: var(--info);">🎓 Student (Career Starter)</button>
+                                    <button class="intel-category-btn primary" data-category="Job Seekers" type="button" style="background-color: var(--success);">💼 Job Seekers (Active Search)</button>
+                                    <button class="intel-category-btn primary" data-category="Working Professionals" type="button" style="background-color: #9333ea;">👔 Working Professionals (Growth/Pivot)</button>
+                                    
+                                    <button class="intel-category-btn primary" data-category="Startup Essentials & Skill Mastery" type="button" style="background-color: #f59e0b;">🚀 Startup Essentials & Skill Mastery</button>
+                                    <button class="intel-category-btn primary" data-category="AI & Automation Fluency" type="button" style="background-color: var(--primary);">🤖 AI Impact & Future Skills</button>
+                                    <button class="intel-category-btn primary" data-category="Green Tech & Sustainability" type="button" style="background-color: #10b981;">🌍 Green Tech & ESG Careers</button>
+                                </div>
+                            </div>
+                            <div id="intelInsightsContainer" class="analytics-container" style="gap: 0; display: none; position: relative; overflow: hidden; padding-bottom: 20px;">
+                                
+                                <button id="intelPrevBtn" type="button" class="slider-nav-btn prev-btn" aria-label="Previous Insight" style="left: 5px;">&#9664;</button>
+                                <button id="intelNextBtn" type="button" class="slider-nav-btn next-btn" aria-label="Next Insight" style="right: 5px;">&#9654;</button>
+                                
+                                <div id="intelSliderWrapper" style="display: flex; overflow-x: hidden; scroll-behavior: smooth; width: 100%; height: auto; flex-shrink: 0; padding: 0 5px;">
+                                    <div id="loadingMessage" style="flex: 0 0 100%; text-align: center; padding: 40px; color: var(--primary);">
+                                        Connecting to data source...
+                                    </div>
+                                </div>
+                                <span id="intelUpdateMonth" style="font-size: 14px; font-weight: 500; color: var(--text-light); text-align: center; width: 100%; margin-top: 10px;"></span>
+                            </div>
+                        </div>
+
+                        <div id="infoPage" class="content-page" style="display:none;">
+                            
+                            <h3 class="page-title" style="padding: 10px 0; font-size: 18px;">💡 JobSnap: User Guide & FAQ</h3>
+
+                            <div id="faqAccordion" class="faq-container">
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">What is JobSnap and its core mission?</button>
+                                    <div class="faq-answer">
+                                        JobSnap is your powerful <strong>Job Search Co-Pilot</strong>—a Chrome Extension built to eliminate the chaos of manual tracking. Our core mission is to replace confusing spreadsheets with a streamlined, intelligent pipeline. We promise <strong>automation</strong> with features like One-Click Auto-Fill, and <strong>confidence</strong> with Smart Reminders, so you can focus entirely on securing the interview, not just organizing the application.
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">What are the main features available?</button>
+                                    <div class="faq-answer">
+                                        JobSnap offers essential features designed to maximize your efficiency and clarity: 
+                                        <ol>
+                                            <li><strong>Effortless Data Capture:</strong> Utilize <strong>One-Click Auto-Fill</strong> to instantly grab job details from major platforms (LinkedIn, Indeed, etc.).</li>
+                                            <li><strong>Never Miss a Beat:</strong> Get proactive <strong>Smart Reminders</strong> and desktop notifications for all deadlines and interview dates.</li>
+                                            <li><strong>Centralized Documents:</strong> Securely store and attach your <strong>Resume/CL Files</strong> directly to each job application card.</li>
+                                            <li><strong>Clear Progress View:</strong> Visualize your pipeline health with dynamic <strong>Dashboard Analytics</strong> and status filtering.</li>
+                                            <li><strong>Total Control:</strong> Easily create portable backups of your entire application history using the <strong>CSV Export</strong> feature.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">Why is JobSnap the best job tracker?</button>
+                                    <div class="faq-answer">
+                                        JobSnap is the best because it prioritizes <strong>Automation and Clarity</strong> over tedious manual logging. It saves you hours with <strong>One-Click Auto-Fill</strong> from all major job boards. Furthermore, our design ensures a superior experience: 
+                                        <ol>
+                                            <li><strong>Unmissable Opportunities:</strong> Proactive <strong>Smart Reminders</strong> track deadlines and interviews 24/7, ensuring you never miss a step.</li>
+                                            <li><strong>Clarity at a Glance:</strong> The <strong>Fixed Sidebar Navigation</strong>, intuitive layout, and <strong>Responsive Cards</strong> show all critical details instantly.</li>
+                                            <li><strong>Best-in-Class Experience:</strong> Features like <strong>Dark Mode</strong> and the organized <strong>Dashboard Analytics</strong> transform job tracking from a chore into a confident, streamlined process.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">What are the common drawbacks of other job trackers?</button>
+                                    <div class="faq-answer">
+                                        Traditional job trackers and specialized web platforms often have three critical drawbacks that JobSnap eliminates:
+                                        <ol>
+                                            <li><strong>The Cost Barrier:</strong> Many popular job tracking platforms require high monthly subscription fees that become unaffordable for long job searches. <strong>JobSnap offers key features via a free trial and an affordable model.</strong></li>
+                                            <li><strong>Manual Pain:</strong> Competitors often still require tedious copy-pasting, wasting hours. JobSnap uses <strong>One-Click Auto-Fill</strong> to instantly grab all necessary data.</li>
+                                            <li><strong>Complex UX:</strong> Other trackers can be slow and visually complex. JobSnap guarantees a <strong>superior UI/UX</strong> and speed that makes tracking and analysis instantaneous and effortless.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">How does JobSnap highlight urgent deadlines?</button>
+                                    <div class="faq-answer">
+                                        Jobs with a deadline *less than 7 days away* are visually flagged on your dashboard. Jobs due within 3 days receive a <strong>'🔥 Urgent'</strong> tag and are prioritized by our notification system.
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">How will I get notifications?</button>
+                                    <div class="faq-answer">
+                                        You will get notifications for every job deadline and interview date which is less than 7 days, every time you open the Chrome. This makes sure you will never miss a deadline or interview.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">What is the "Export to CSV" button for?</button>
+                                    <div class="faq-answer">
+                                        The <strong>Export to CSV</strong> button converts all your saved job data into a spreadsheet file, providing a complete, easily shareable backup of your application history.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">Tell me about the Premium Plans and Trial.</button>
+                                    <div class="faq-answer">
+                                        Premium unlocks all automated features. We offer a generous free trial so you can experience auto-fill and reminders. Once expired, you can unlock premium features with a one-time license key.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question" type="button">I need technical help or want to suggest a feature.</button>
+                                    <div class="faq-answer">
+                                        For direct support or feature suggestions, please visit our dedicated support page linked on our Chrome Web Store page. We love feedback!
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        <div id="tasksModalOverlay" class="modal-overlay" style="display:none;"></div>
+                        <div id="tasksModal" class="tasks-modal-box" style="display:none;">
+                            <h3 id="tasksModalTitle" class="tasks-modal-title">Tasks for: Job Title</h3>
+                            <div id="tasksList" class="tasks-list">
+                            </div>
+                            <div class="tasks-input-area">
+                                <input type="text" id="newTaskInput" placeholder="Add a new task..." maxlength="60" />
+                                <button id="addTaskBtn" type="button">➕ Add</button>
+                            </div>
+                            <button id="closeTasksModal" class="delete-close-btn" style="margin-top: 15px;">Close</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+    <div id="offerModalOverlay" class="modal-overlay" style="display:none;"></div>
+    <div id="offerModal" class="offer-modal-box" style="display:none;">
+        <h3 id="offerModalTitle" class="offer-modal-title">Tool Name</h3>
+        <div id="offerModalContent" class="offer-tool-content">
+        </div>
+        <button id="closeOfferModal" class="delete-close-btn" style="margin-top: 15px;">Close</button>
+    </div>
+    
+    <div id="modalOverlay" class="modal-overlay" style="display:none;"></div>
+    <div id="deleteOptionsModal" class="delete-modal-box" style="display:none;">
+        <h3 class="delete-modal-title">Select Jobs to Delete</h3>
+        <p class="delete-modal-subtitle">Permanently delete all jobs with status:</p>
+        <div class="delete-options-grid">
+            <button type="button" class="delete-modal-option" data-status="Not Applied">Not Applied</button>
+            <button type="button" class="delete-modal-option" data-status="Applied">Applied</button>
+            <button type="button" class="delete-modal-option" data-status="Shortlisted">Shortlisted</button>
+            <button type="button" class="delete-modal-option" data-status="Interviewed">Interviewed</button>
+            <button type="button" class="delete-modal-option" data-status="Offer">Offer</button>
+            <button type="button" class="delete-modal-option" data-status="Rejected">Rejected</button>
+            <button type="button" class="delete-modal-option delete-all-btn-specific" data-status="ALL"> Delete All Jobs</button>
+        </div>
+        <hr style="margin: 15px 0; border-color: var(--border-light);" />
+        <button type="button" id="closeDeleteModal" class="delete-close-btn">Cancel</button>
+    </div>
+
+    <div id="aiLoadingModalOverlay" class="modal-overlay" style="display:none;"></div>
+    <div id="aiLoadingModal" class="tasks-modal-box" style="display:none; width: 350px; padding: 40px 20px;">
+        <div style="text-align: center;">
+            <div class="bounce-ball-container" style="display: block; margin: 0 auto 15px auto;">
+                <div class="bounce-ball do-bounce" style="background: var(--success-darker); animation-duration: 1.5s;"></div>
+            </div>
+            
+            <h3 style="font-size: 20px; font-weight: 700; color: var(--text-light); margin-bottom: 10px;" id="aiLoadingMessage">
+                Establishing Secure Connection...
+            </h3>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">
+                Step <span id="aiLoadingStep">1/4</span> (Please wait, this ensures high accuracy.)
+            </p>
+
+            <div style="height: 12px; width: 100%; background: var(--hover-light); border-radius: 6px; overflow: hidden;">
+                <div id="aiLoadingProgress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%); border-radius: 6px; transition: width 0.8s ease-in-out;"></div>
+            </div>
+        </div>
+        </div>
+    <script src="popup.js"></script>
+</body>
+</html>

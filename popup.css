@@ -1,0 +1,2534 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ---------- COLOR VARIABLES ---------- */
+:root {
+    --bg-light: #f8fafc;
+    --card-light: #fff;
+    --text-light: #1e293b;
+    --border-light: #e2e8f0;
+    --hover-light: #f1f5f9;
+    --bg-dark: #121212;
+    --card-dark: #1e1e1e;
+    --text-dark: #fff;
+    --border-dark: #444;
+    --hover-dark: #2a2a2a;
+    --applied: #3b82f6; /* Blue */
+    --shortlisted: #0ea5e9; /* Light Blue */
+    --interviewed: #22c55e; /* Green (Success) */
+    --rejected: #ef4444; /* Red (Danger) */
+    --offer: #f59e0b; /* Yellow (Warning) */
+    --not-applied: #64748b;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --success: #22c55e;
+    --success-hover: #15803d; /* Added for Pay & Unlock button hover */
+    --success-darker: #7c3aed; /* Vibrant Violet for Action Tip & Recruiter Score */
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #0ea5e9;
+    --delete-modal-bg-light: linear-gradient(125deg, #ffffff 0%, #f0f4f9 100%);
+    --delete-modal-title-light: #2563eb;
+    --delete-modal-option-bg-light: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%);
+    --delete-modal-option-text-light: #fff;
+    --delete-modal-option-hover-bg-light: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%);
+    --delete-modal-option-hover-text-light: #e0e7ff;
+    --delete-modal-close-btn-bg-light: #e5e7eb;
+    --delete-modal-close-btn-text-light: #374151;
+    --delete-modal-close-btn-hover-light: #cbd5e1;
+    --delete-modal-border-light: 2.8px solid #3b82f6;
+    --delete-modal-bg-dark: linear-gradient(90deg, #282828 0%, #1e1e1e 100%);
+    --delete-modal-title-dark: #60a5fa;
+    --delete-modal-option-bg-dark: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+    --delete-modal-option-text-dark: #e0e7ff;
+    --delete-modal-option-hover-bg-dark: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+    --delete-modal-option-hover-text-dark: #23263a;
+    --delete-modal-close-btn-bg-dark: #333;
+    --delete-modal-close-btn-text-dark: #eee;
+    --delete-modal-close-btn-hover-dark: #444;
+    --delete-modal-border-dark: 2.6px solid #60a5fa;
+
+    /* --- NEW SIDEBAR LAYOUT MODEL 3 VARIABLES --- */
+    --sidebar-width-collapsed: 50px; 
+    --sidebar-width-expanded: 180px;
+    --sidebar-transition: width 0.3s ease-in-out;
+}
+
+/* ---------- RESET & BASE ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s, border-color 0.25s, box-shadow 0.25s;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    /* CRITICAL FIX: Increased width for better layout */
+    width: 750px; 
+    min-height: 600px;
+    height: 100%;
+    padding: 0;
+    background: #f6f8fb; 
+    color: var(--text-light);
+    line-height: 1.5;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0; 
+    height: 100%;
+    width: 100%;
+    padding: 0;
+}
+
+/* -------------------------------------------------------------------- */
+/* --- UPDATED: LAYOUT FOR HOVER-TO-EXPAND SIDEBAR (OVERLAY MODEL) --- */
+/* -------------------------------------------------------------------- */
+
+.main-app-container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden; 
+}
+
+/* NEW: Container to hold the horizontal layout of sidebar and content */
+.content-body-with-sidebar {
+    display: flex;
+    flex-grow: 1;
+    height: calc(100vh - 120px); 
+    position: relative; 
+    overflow-y: hidden; 
+}
+.content-body-with-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.content-body-with-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+.dark-mode .content-body-with-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* --- FIXED SIDEBAR (OVERLAY CONTROLLED) --- */
+.fixed-sidebar-menu {
+    position: absolute; 
+    left: 0;
+    top: 0;
+    z-index: 2000; 
+    width: var(--sidebar-width-collapsed); 
+    min-width: var(--sidebar-width-collapsed); 
+    background: var(--card-light);
+    border-right: 1px solid var(--border-light); 
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 10px 0;
+    transition: var(--sidebar-transition); 
+    overflow: hidden;
+    height: 100%; 
+    padding-top: 10px; 
+}
+
+/* HOVER EFFECT: Expands the sidebar over the content */
+.fixed-sidebar-menu:hover {
+    width: var(--sidebar-width-expanded);
+}
+
+.dark-mode .fixed-sidebar-menu {
+    background: var(--card-dark);
+    border-right: 1px solid var(--border-dark);
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.45);
+}
+
+/* --- SIDEBAR COMPONENTS (No changes needed here as they relate to inner display) --- */
+.sidebar-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    flex-grow: 1;
+    padding: 0 5px 10px 5px; 
+}
+
+.fixed-sidebar-menu .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 16px;
+    font-weight: 600;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    transition: background 0.2s, color 0.2s, width 0.3s ease-in-out;
+}
+
+.fixed-sidebar-menu:hover .nav-btn {
+    width: calc(var(--sidebar-width-expanded) - 10px);
+    justify-content: flex-start;
+    margin: 0 5px;
+}
+
+.fixed-sidebar-menu .nav-btn:hover {
+    background: var(--hover-light);
+}
+.dark-mode .fixed-sidebar-menu .nav-btn {
+    color: var(--text-dark);
+}
+.dark-mode .fixed-sidebar-menu .nav-btn:hover {
+    background: var(--hover-dark);
+}
+
+.fixed-sidebar-menu .nav-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+.fixed-sidebar-menu .nav-btn.active:hover {
+    background: var(--primary-hover);
+}
+
+.fixed-sidebar-menu .nav-btn .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
+    flex-grow: 1;
+    margin-left: 10px;
+    
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out; 
+}
+
+.fixed-sidebar-menu:hover .nav-btn .label {
+    opacity: 1;
+}
+
+.fixed-sidebar-menu .nav-btn .icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* --- CONTENT WRAPPER --- */
+.content-wrapper {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    overflow-y: hidden; 
+    padding: 0;
+    
+    /* CRITICAL CHANGE: Fixed margin to offset the collapsed sidebar */
+    margin-left: var(--sidebar-width-collapsed); 
+}
+
+
+/* --- HEADER ALIGNMENT (FIXED) --- */
+.header-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky; 
+    top: 0;
+    z-index: 1000;
+    background: var(--bg-light); 
+    padding: 10px 16px 10px calc(16px + var(--sidebar-width-collapsed));
+    border-bottom: 1.5px solid var(--border-light);
+    min-height: 62px; 
+}
+
+.dark-mode .header-inline {
+    background: var(--bg-dark);
+    border-bottom-color: var(--border-dark);
+}
+
+.title-row {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 8px; 
+}
+
+/* CRITICAL FIX: Make action buttons horizontal and compact */
+.action-buttons {
+    display: flex;
+    gap: 8px; 
+    align-items: center;
+    white-space: nowrap; 
+}
+
+/* Style the actual header buttons to be smaller and fit the new look */
+.action-buttons button {
+    padding: 8px 12px; 
+    font-size: 13px; 
+    font-weight: 600;
+    line-height: 1; 
+    height: 38px; 
+    flex-shrink: 0;
+}
+
+/* Specific button styles */
+#toggleTheme {
+    background: #555;
+    color: #fff;
+}
+
+#toggleTheme:hover {
+    background: #777;
+}
+
+/* --- Dynamic Content Area Scroll (CRITICAL FIX) --- */
+#appContent {
+    flex-grow: 1;
+    display: block;
+    padding: 0 16px 0 16px; 
+    overflow-y: auto;
+}
+.dark-mode .app-content-panel::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* --- CRITICAL CONTENT MARGIN FIXES (PRESERVED) --- */
+/* ------------------------------------------------------------------------- */
+.search-container,
+.dashboard,
+.job-list,
+.delete-area-premium,
+#emptyStateCta,
+#jobForm,
+.analytics-container,
+.faq-container {
+    width: 100% !important; 
+    margin-left: 0 !important;
+    padding-left: 0;
+    padding-right: 0;
+}
+.page-title {
+    margin-left: 0 !important; 
+    width: 100% !important;
+}
+.free-trial-message {
+    padding: 10px 15px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid var(--primary);
+    margin-top: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    margin-left: 0 !important; 
+    width: 100% !important; 
+}
+.dark-mode .free-trial-message {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: #60a5fa;
+}
+
+/* General fixes continuing below */
+.job-list {
+    max-height: unset;
+    overflow-y: unset;
+    padding-right: 4px;
+}
+
+#analyticsPageContent {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+.chart-section {
+    width: 100%;
+    padding: 0 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------------------------------------------------------------------------------- */
+/* 泙 NEW ATS OPTIMIZER UI STYLES (MATCHING SCREENSHOT) 泙 */
+/* ---------------------------------------------------------------------------------- */
+
+/* 1. Global Page Background Effect (Soft Gradient) */
+#atsOptimizerPage {
+    background: radial-gradient(circle at 50% 10%, rgba(255, 100, 150, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(150, 100, 255, 0.06) 0%, transparent 40%);
+}
+.dark-mode #atsOptimizerPage {
+     background: radial-gradient(circle at 50% 10%, rgba(150, 50, 100, 0.1) 0%, transparent 40%),
+                 radial-gradient(circle at 50% 90%, rgba(100, 50, 150, 0.1) 0%, transparent 40%);
+}
+
+/* 2. Style the Minimalist Input Fields for the AI Card */
+#aiInputCard {
+    background: var(--card-light); 
+    border: 1px solid var(--border-light); 
+    border-radius: 20px !important; 
+    padding: 25px !important; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+}
+.dark-mode #aiInputCard {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+#aiInputCard input[type="text"],
+#aiInputCard textarea {
+    padding: 12px 18px !important;
+    border-radius: 12px !important;
+    border: none !important; 
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1) !important; 
+    background: #f7f7f7 !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+}
+.dark-mode #aiInputCard input[type="text"],
+.dark-mode #aiInputCard textarea {
+    background: #333 !important;
+    box-shadow: 0 1px 6px rgba(255, 255, 255, 0.08) !important;
+    color: #eee;
+}
+
+#aiInputCard textarea {
+    min-height: 150px !important; 
+    line-height: 1.5 !important;
+}
+
+/* 3. Gradient Button Style (Used for Analyze Button) */
+.gradient-btn {
+    background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%) !important;
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+    color: #fff !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-transform: uppercase;
+    font-weight: 700 !important;
+}
+.gradient-btn:hover {
+    background: linear-gradient(90deg, #3b82f6 0%, #7c3aed 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.5);
+}
+
+/* 4. Loading State Progress Bar (For UX feedback during AI API call) */
+@keyframes progressAnim {
+    0% { width: 10%; }
+    50% { width: 90%; }
+    100% { width: 10%; }
+}
+.progress-bar-fill {
+    transition: width 0.1s linear;
+}
+
+/* ---------------------------------------------------- */
+/* --- GENERAL APP STYLES (PRESERVED) --- */
+/* ---------------------------------------------------- */
+
+.title-area {
+    margin-left: 0px;
+}
+
+.job-snap-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    background: linear-gradient(90deg, var(--primary), #0ea5e9 60%, #a0e9ff 100%);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 4.5s linear infinite;
+}
+
+/* ---------- BOUNCE ANIMATION (PRESERVED) ---------- */
+.bounce-o,
+.bounce-ball {
+    display: inline-block;
+}
+
+.bounce-o.do-bounce,
+.bounce-ball.do-bounce {
+    animation: jumpRoll 0.8s ease;
+}
+
+@keyframes jumpRoll {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+    30% {
+        transform: translateY(-15px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+    70% {
+        transform: translateY(-15px) rotate(270deg);
+    }
+    100% {
+        transform: translateY(0) rotate(360deg);
+    }
+}
+
+.bounce-ball-container {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.bounce-ball {
+    width: 16px;
+    height: 16px;
+    margin: 0 3px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+        #ff6b6b,
+        #e60000 40%,
+        #990000 70%,
+        #660000 100%);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6),
+        0 2px 5px rgba(0, 0, 0, 0.3);
+    transform-origin: center bottom;
+    position: relative;
+    z-index: 2;
+}
+
+.bounce-ball::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 4px 2px rgba(255, 0, 0, 0.35);
+    animation: pulseGlow 1.6s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes pulseGlow {
+    0%,
+    100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes shadowBounce {
+    0%,
+    100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateX(-50%) scale(1.3);
+        opacity: 0.15;
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ---------- BUTTONS (PRESERVED) ---------- */
+button {
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary);
+    color: #fff;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px) scale(1.03);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* General style for the smaller header buttons */
+.action-buttons .compact-btn {
+    padding: 8px 12px; 
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1; 
+    height: 38px;
+    flex-shrink: 0;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Specific button styles */
+#toggleTheme {
+    background: #555;
+    color: #fff;
+}
+
+#toggleTheme:hover {
+    background: #777;
+}
+
+/* ---------- JOB ACTIONS (PRESERVED) ---------- */
+.job-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 6px;
+}
+
+.job-actions button {
+    flex: 1 1 20%;
+    min-width: 100px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    margin-bottom: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: background 0.16s, color 0.16s, box-shadow 0.22s, transform 0.22s;
+}
+
+.job-actions button.viewResumeBtn {
+    background: #14b8a6;
+}
+
+.job-actions button.viewResumeBtn:hover {
+    background: #22d3ee;
+    color: #f0fdfa;
+}
+
+.job-actions button.viewCoverLetterBtn {
+    background: #8b5cf6;
+}
+
+.job-actions button.viewCoverLetterBtn:hover {
+    background: #a78bfa;
+    color: #faf5ff;
+}
+
+.job-actions button.editBtn {
+    background: #fbbf24;
+    color: #1e293b;
+}
+
+.job-actions button.editBtn:hover {
+    background: #fde68a;
+    color: #1e293b;
+}
+
+.job-actions button.deleteBtn {
+    background: #2563eb;
+}
+
+.job-actions button.deleteBtn:hover {
+    background: #3b82f6;
+}
+/* New Tasks Button Style */
+
+/* New Tasks Button Style (Vibrant Violet) */
+.job-actions button.tasksBtn {
+    background: #6366f1;
+    color: #fff;
+    order: 1;
+    min-width: 100px;
+}
+.job-actions button.tasksBtn:hover {
+    background: #4f46e5;
+}
+/* Ensure dark mode styling is also covered */
+.dark-mode .job-actions button.tasksBtn {
+    background: #818cf8;
+    color: #1e293b;
+}
+.dark-mode .job-actions button.tasksBtn:hover {
+    background: #6366f1;
+}
+
+.dark-mode .job-actions button.viewResumeBtn {
+    background: #22d3ee;
+    color: #19232d;
+}
+
+.dark-mode .job-actions button.viewCoverLetterBtn {
+    background: #a78bfa;
+    color: #2d1932;
+}
+
+.dark-mode .job-actions button.editBtn {
+    background: #fde68a;
+    color: #1e293b;
+}
+
+.dark-mode .job-actions button.deleteBtn {
+    background: #6366f1;
+    color: #fff;
+}
+
+.dark-mode .job-actions button {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- RESUME / COVER ROW (PRESERVED) ---------- */
+.resume-file-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.resume-file-row .resume-flag {
+    margin: 0;
+    font-size: 0.96em;
+    color: #666;
+}
+
+.resume-file-row button {
+    padding: 6px 13px;
+    font-size: 12px;
+    border-radius: 5px;
+    background: #14b8a6;
+    color: white;
+    box-shadow: none;
+    min-width: 88px;
+}
+
+.resume-file-row button.viewCoverLetterBtn {
+    background: #8b5cf6;
+}
+
+.resume-file-row button:hover {
+    background: #22d3ee;
+}
+
+.resume-file-row button.viewCoverLetterBtn:hover {
+    background: #a78bfa;
+    color: #faf5ff;
+}
+
+.dark-mode .resume-file-row button {
+    color: #222;
+}
+
+/* ---------- FORM & SEARCH (PRESERVED) ---------- */
+#jobForm {
+    background: var(--card-light);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text-light);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* New CSS for form alignment */
+.form-group.file-upload-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.file-upload-group input {
+    padding-left: 0;
+    border: none;
+    background: none;
+}
+
+.form-group.file-upload-group input:focus {
+    box-shadow: none;
+}
+
+/* ---------- SEARCH BAR (PRESERVED) ---------- */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    font-size: 13px;
+}
+
+#searchInput:focus {
+    transform: scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.counter {
+    position: absolute;
+    right: 12px;
+    font-size: 11px;
+    color: #64748b;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+/* ---------- EXPAND BUTTON (PRESERVED) ---------- */
+.expand-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+#expandBtn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px 3px 10px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(37,99,235,0.14);
+    transition: background 0.18s;
+}
+#expandBtn:hover, #expandBtn:focus {
+    background: #1951c5;
+}
+#expandBtn svg {
+    display: block;
+    margin: auto;
+}
+
+/* ---------- JOB CARDS (PRESERVED) ---------- */
+.job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: unset;
+    overflow-y: unset;
+    padding-right: 4px;
+}
+
+.job-card {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    border: 1.5px solid rgba(164, 202, 254, 0.22);
+    box-shadow: 0 2px 12px 0 rgba(59, 130, 246, 0.09);
+    padding: 12px;
+    animation: fadeSlideUp 0.4s ease;
+    transition: box-shadow 0.25s cubic-bezier(0.21, 0.6, 0.64, 1), transform 0.21s cubic-bezier(0.22, 0.68, 0.54, 1.36);
+}
+
+.job-card .job-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.job-card .job-content {
+    margin-bottom: 15px;
+}
+
+.job-card .job-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 15px;
+    margin-bottom: 10px;
+}
+
+.job-card .job-detail-item {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.job-card .job-detail-item .label {
+    color: #64748b;
+}
+
+.job-card .job-detail-item .label {
+    color: #64748b;
+}
+
+.job-detail-item-row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+}
+
+.job-card .job-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.job-card .job-link-btn, .job-card .resume-link-btn, .job-card .cover-letter-link-btn {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #fff;
+    background-color: var(--primary);
+    display: inline-block;
+    transition: background-color 0.2s;
+}
+
+.job-card .job-link-btn:hover, .job-card .resume-link-btn:hover, .job-card .cover-letter-link-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.job-card .resume-link-btn {
+    background-color: #14b8a6;
+}
+
+.job-card .resume-link-btn:hover {
+    background-color: #0d9488;
+}
+
+.job-card .cover-letter-link-btn {
+    background-color: #8b5cf6;
+}
+
+.job-card .cover-letter-link-btn:hover {
+    background-color: #7c3aed;
+}
+
+.job-card .card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.job-card .edit-btn, .job-card .delete-btn {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #fbbf24;
+    border: none;
+    cursor: pointer;
+}
+
+.job-card .delete-btn {
+    background-color: #ef4444;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0.3;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dark-mode .job-card {
+    background: rgba(30, 35, 44, 0.78);
+    border: 1.3px solid rgba(85, 165, 255, 0.13);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.11);
+}
+
+.job-card:hover {
+    box-shadow: 0 8px 28px 0 rgba(59, 130, 246, 0.2), 0 2px 12px 0 rgba(30, 41, 59, 0.13);
+    transform: translateY(-5px) scale(1.025);
+    z-index: 2;
+    cursor: pointer;
+}
+
+.job-header {
+    margin-bottom: 8px;
+}
+
+.job-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 2px;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.company-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.job-meta {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+/* ---------- TAGS (PRESERVED) ---------- */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    border-radius: 25px;
+    letter-spacing: 0.4px;
+    line-height: 1;
+    color: #fff;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
+}
+
+.tag.status {
+    background: var(--primary);
+}
+
+.tag.deadline-urgent,
+.tag.interview-urgent,
+.tag.status-offer {
+    background: linear-gradient(90deg, #ef4444 0%, #fde68a 60%, #ef4444 100%);
+    background-size: 250% auto;
+    color: #fff;
+    animation: tagGradientMove 2.5s linear infinite, pulseBounce 1.2s infinite;
+}
+
+@keyframes tagGradientMove {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+.tag.deadline-soon {
+    background: var(--warning);
+    animation: softGlow 1.5s infinite;
+}
+
+.tag.deadline-expired {
+    background: #64748b;
+    animation: fadeBlink 2s infinite;
+}
+
+.tag.interview-soon {
+    background: var(--interviewed);
+    animation: softGlow 1.5s infinite;
+}
+
+.tag.interview-expired {
+    background: #6b7280;
+    animation: fadeBlink 2s infinite;
+}
+
+@keyframes pulseBounce {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes softGlow {
+    0%,
+    100% {
+        box-shadow: 0 0 5px currentColor;
+    }
+    50% {
+        box-shadow: 0 0 14px currentColor;
+    }
+}
+
+@keyframes fadeBlink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ---------- DASHBOARD (PRESERVED) ---------- */
+.dashboard {
+    background: rgba(59, 130, 246, 0.08);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--primary);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dashboard-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    background: #f1f5f9;
+    color: var(--text-light);
+    border: none;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: border 0.14s, background 0.2s, color 0.14s;
+}
+
+.dashboard-stat.active {
+    border: 2px solid var(--primary);
+    background: #e0eaff;
+    color: var(--primary);
+    z-index: 1;
+}
+
+.dashboard-stat:focus {
+    outline: 2px solid var(--primary-hover);
+}
+
+/* ---------- SCROLLBAR (PRESERVED) ---------- */
+/* Handled by .content-body-with-sidebar scrollbar styles */
+.app-content-panel::-webkit-scrollbar {
+    width: 0; /* Hide scrollbar in inner content panel if outer handles it */
+}
+
+/* REMOVED: .job-list scrollbar styles as #appContent handles scrolling */
+
+@media (max-height: 600px) {
+    /* REMOVED: .job-list max-height as #appContent handles the viewport restriction */
+}
+
+/* ---------- DARK MODE (PRESERVED) ---------- */
+.dark-mode {
+    /* Use pure dark background for better contrast with cards */
+    background: var(--bg-dark); 
+    color: var(--text-dark);
+}
+
+.dark-mode .container,
+.dark-mode #jobForm,
+.dark-mode .job-card {
+    background: var(--card-dark);
+    color: var(--text-dark);
+}
+
+.dark-mode .form-group label {
+    color: #ffffffcc;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: #1e1e1e;
+    color: #eee;
+    border-color: var(--border-dark);
+}
+
+.dark-mode .company-name {
+    color: #4ade80;
+}
+
+.dark-mode .job-details {
+    color: #ccc;
+}
+
+.dark-mode .dashboard-stat {
+    background: #23272f;
+    color: #eee;
+}
+
+.dark-mode .dashboard-stat.active {
+    background: #242c40;
+    border: 2px solid var(--primary-hover);
+    color: var(--primary-hover);
+}
+
+/* Only apply border to the fixed app header */
+.dark-mode .header-inline {
+    background: var(--bg-dark);
+    border-bottom-color: var(--border-dark);
+}
+
+.dark-mode .job-title {
+    color: #fff !important;
+    font-weight: 700;
+}
+
+/* CRITICAL FIX FOR QUOTE VISIBILITY */
+.dark-mode .motivation-line > div {
+    color: #ffffff !important; /* Forces quote text to be bright white */
+}
+/* END CRITICAL FIX */
+
+
+/* ---------- TOAST NOTIFICATION (PRESERVED) ---------- */
+.toast-notification {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 190px;
+    max-width: 80%;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: #333;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 12px rgba(30, 41, 59, 0.15), 0 1px 4px rgba(0, 0, 0, 0.09);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.3s, top 0.3s;
+    text-align: center;
+}
+
+.toast-notification.toast-show {
+    opacity: 1;
+    pointer-events: auto;
+    top: 34px;
+}
+
+.toast-notification.toast-success {
+    background: var(--success);
+    color: #fff;
+}
+
+.toast-notification.toast-error {
+    background: var(--danger);
+    color: #fff;
+}
+
+.toast-notification.toast-info {
+    background: var(--info);
+    color: #fff;
+}
+
+.dark-mode .toast-notification {
+    background: #25272d;
+    color: #fff;
+}
+
+.dark-mode #expandBtn {
+    background: #6366f1;
+}
+
+.dark-mode #expandBtn:hover {
+    background: #3730a3;
+}
+
+
+/* ---------------------------------------------------------------------------------- */
+/* ---------- MODAL STYLES (Delete Modal and NEW Tasks Modal) ---------- */
+/* ---------------------------------------------------------------------------------- */
+
+/* 1. Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: 9998;
+    transition: opacity 0.2s;
+}
+
+/* 2. Delete Modal Box (Used for Delete confirmation) */
+.delete-modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    max-width: 90%;
+    padding: 25px 20px;
+    border-radius: 12px;
+    background: var(--delete-modal-bg-light);
+    border: var(--delete-modal-border-light);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    color: var(--text-light);
+    text-align: center;
+}
+.dark-mode .delete-modal-box {
+    background: var(--delete-modal-bg-dark);
+    border: var(--delete-modal-border-dark);
+    color: var(--text-dark);
+}
+
+/* 3. Tasks Modal Box (Used for Tasks and AI Report) */
+.tasks-modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    max-height: 90vh;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card-light);
+    border: 1px solid var(--primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    overflow-y: auto; /* Ensure scrollability for content */
+}
+.dark-mode .tasks-modal-box {
+    background: var(--card-dark);
+    border-color: var(--primary-hover);
+}
+
+.tasks-modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+
+.tasks-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+.tasks-list::-webkit-scrollbar { width: 5px; }
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+    color: var(--text-light);
+}
+.dark-mode .task-item {
+    border-bottom-color: var(--border-dark);
+    color: var(--text-dark);
+}
+
+.task-item input[type="checkbox"] {
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.task-item .task-text {
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: #64748b;
+}
+.dark-mode .task-item.completed .task-text {
+    color: #94a3b8;
+}
+
+.tasks-input-area {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+}
+#newTaskInput {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 13px;
+    background: var(--card-light);
+    color: var(--text-light);
+}
+.dark-mode #newTaskInput {
+    background: #23272f;
+    border-color: var(--border-dark);
+    color: var(--text-dark);
+}
+#addTaskBtn {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    height: 34px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* 4. Delete Modal & Close Button */
+.delete-options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    margin-top: 15px;
+    justify-content: center;
+}
+.delete-modal-option {
+    flex: 1 1 calc(50% - 12px);
+    min-width: 120px;
+    padding: 10px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    background: var(--delete-modal-option-bg-light);
+    color: var(--delete-modal-option-text-light);
+}
+.delete-modal-option:hover {
+    background: var(--delete-modal-option-hover-bg-light);
+    color: var(--delete-modal-option-hover-text-light);
+    transform: scale(1.02);
+}
+.dark-mode .delete-modal-option {
+    background: var(--delete-modal-option-bg-dark);
+    color: var(--delete-modal-option-text-dark);
+}
+
+/* NEW STYLES FOR DELETE ALL BUTTON */
+.delete-modal-option.delete-all-btn-specific {
+    flex: 1 1 100%;
+    margin-top: 8px;
+    background: var(--danger);
+    color: #fff;
+    order: 10;
+    font-size: 14px;
+}
+.delete-modal-option.delete-all-btn-specific:hover {
+    background: #c93030;
+    color: #fff;
+    transform: scale(1.02);
+}
+/* END NEW STYLES */
+
+.delete-modal-option.delete-all-btn {
+    flex: 1 1 100%;
+    background: var(--danger);
+}
+.delete-modal-option.delete-all-btn:hover {
+    background: #a31919;
+}
+.delete-close-btn {
+    background: var(--delete-modal-close-btn-bg-light);
+    color: var(--delete-modal-close-btn-text-light);
+    font-size: 12.5px;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-top: 8px;
+    border: none;
+    padding: 7px 0;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.13s;
+}
+
+/* ---------------------------------------------------------------------------------- */
+/* ---------- OFFER COMPARISON MODAL STYLES (ADDED) ---------- */
+/* ---------------------------------------------------------------------------------- */
+.offer-modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+    max-height: 90vh;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card-light);
+    border: 1px solid var(--primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    overflow-y: auto;
+}
+.dark-mode .offer-modal-box {
+    background: var(--card-dark);
+    border-color: var(--primary-hover);
+}
+.offer-modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+.dark-mode .offer-modal-title {
+    color: var(--primary-hover);
+}
+.offer-tool-content {
+    padding: 5px 0;
+    font-size: 14px;
+}
+.offer-tool-content label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+    display: block;
+    margin-bottom: 5px;
+}
+.dark-mode .offer-tool-content label {
+    color: var(--text-dark);
+}
+.offer-tool-content input[type="text"],
+.offer-tool-content input[type="number"],
+.offer-tool-content select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 13px;
+    background: var(--card-light);
+    color: var(--text-light);
+}
+.dark-mode .offer-tool-content input,
+.dark-mode .offer-tool-content select {
+    background: #23272f;
+    border-color: var(--border-dark);
+    color: var(--text-dark);
+}
+/* ---------------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------------------- */
+/* ---------- ACCORDION STYLES (NEW HOVER FUNCTIONALITY) ---------- */
+/* ---------------------------------------------------------------------------------- */
+
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.faq-item {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--card-light);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+}
+.dark-mode .faq-item {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
+
+.faq-question {
+    width: 100%;
+    text-align: left;
+    padding: 12px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    transition: background-color 0.2s;
+    display: block;
+    transform: none !important;
+    border-radius: 0;
+}
+.dark-mode .faq-question {
+    color: var(--text-dark);
+}
+
+/* Style for the hovered/active question */
+.faq-item:hover .faq-question, .faq-question.active {
+    background-color: var(--hover-light);
+    color: var(--primary);
+}
+.dark-mode .faq-item:hover .faq-question, .dark-mode .faq-question.active {
+    background-color: var(--hover-dark);
+    color: var(--primary-hover);
+}
+
+.faq-answer {
+    padding: 0 15px 15px;
+    padding-top: 5px;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.6;
+    display: none;
+    border-top: 1px solid var(--border-light);
+    margin-top: -1px;
+}
+.dark-mode .faq-answer {
+    color: #a3a3a3;
+    border-top-color: var(--border-dark);
+}
+
+/* --- NEW FUNNEL CHART STYLES --- */
+
+/* Overall Chart Section Container */
+.chart-section {
+    width: 100%;
+    padding: 0 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.chart-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin: 10px 0 10px 0;
+    padding-left: 5px;
+}
+.dark-mode .chart-title {
+    color: var(--text-dark);
+}
+
+.visual-chart {
+    width: 100%;
+    padding: 10px;
+    background: var(--card-light);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.dark-mode .visual-chart {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
+
+/* Horizontal Bar Chart (used for Rating/Activity) */
+.horizontal-bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.h-bar-item {
+    display: flex;
+    flex-direction: column;
+}
+.h-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+.h-bar-visualization {
+    height: 12px;
+    width: 100%;
+    background: var(--hover-light);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.h-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease-out;
+}
+
+/* Funnel Chart (Stacked Bar Look) */
+.funnel-chart {
+    width: 100%;
+    margin-top: 15px;
+    padding: 0 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.funnel-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.funnel-bar-container {
+    width: 100%;
+    background: var(--border-light);
+    border-radius: 4px;
+    height: 30px; 
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    position: relative;
+}
+.funnel-bar {
+    height: 100%;
+    display: flex; 
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-weight: 600;
+    font-size: 11px;
+    color: white;
+    transition: width 0.5s ease-out; 
+    min-width: 0%; 
+}
+
+/* Funnel Stage Colors */
+.stage-applied { background: var(--primary); }
+.stage-shortlisted { background: var(--info); }
+.stage-interviewed { background: var(--success); }
+.stage-offer { background: var(--warning); }
+.stage-rejected { background: var(--danger); }
+
+.funnel-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-light);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.dark-mode .funnel-label {
+    color: var(--text-dark);
+}
+.funnel-label .count {
+    font-weight: 700;
+    color: var(--primary-hover);
+}
+.dark-mode .funnel-label .count {
+    color: #60a5fa;
+}
+
+/* ---------------------------------------------------------------------------------- */
+/* --- NEW CAREER INTEL PAGE STYLES (UPDATED FOR HORIZONTAL SLIDER) --- */
+/* ---------------------------------------------------------------------------------- */
+
+/* 1. Base Container for the Slider */
+#intelInsightsContainer {
+    position: relative !important; 
+    overflow: hidden !important; 
+    padding: 10px 0 !important;
+}
+
+/* 2. Horizontal Wrapper (Handles the actual sliding) */
+#intelSliderWrapper {
+    display: flex;
+    overflow-x: hidden; 
+    scroll-snap-type: x mandatory; 
+    width: 100%;
+    height: auto;
+    padding: 0 10px; 
+    box-sizing: content-box; 
+}
+
+/* 3. Navigation Buttons (Semi-transparent, centered vertically) */
+.slider-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); 
+    z-index: 10;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.5); 
+    color: white;
+    font-size: 20px; 
+    border: none;
+    cursor: pointer;
+    border-radius: 50%; 
+    width: 45px; 
+    height: 45px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0; 
+    transition: background-color 0.2s, opacity 0.3s, transform 0.2s;
+}
+
+/* Hover over the container to make the buttons appear */
+#intelInsightsContainer:hover .slider-nav-btn {
+    opacity: 1; 
+}
+
+/* Adjusted placement to be clear of the card edge */
+.slider-nav-btn.prev-btn { 
+    left: 15px;
+}
+.slider-nav-btn.next-btn { 
+    right: 15px;
+}
+
+.slider-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.dark-mode .slider-nav-btn {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.dark-mode .slider-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+
+/* 4. Segment Card (Each Segment is now a full-screen, horizontal card) */
+.insight-segment {
+    flex: 0 0 calc(100% - 20px); 
+    scroll-snap-align: start; 
+    
+    margin: 5px 10px; 
+    padding: 24px 20px; 
+    
+    border: 1px solid rgba(0, 0, 0, 0.05); 
+    border-radius: 20px; 
+    background: var(--card-light); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05),
+                        0 10px 30px rgba(0, 0, 0, 0.05); 
+    transition: all 0.3s ease-in-out;
+    
+    overflow-y: auto; 
+    max-height: 480px; 
+    min-height: 300px; 
+}
+
+.dark-mode .insight-segment {
+    border: 1px solid var(--border-dark); 
+    background: #1e1e1e; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4),
+                        0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* --- Section Title (e.g., "REGIONAL INTERNSHIPS") --- */
+.segment-title {
+    font-size: 17px; 
+    font-weight: 700;
+    padding: 0 0 8px 0; 
+    border-bottom: 2px solid var(--primary); 
+    margin-top: 0;
+    margin-bottom: 15px; 
+    color: var(--primary);
+}
+.dark-mode .segment-title {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* 5. Insight Item Styling (Premium/Apple-like look) */
+
+.insight-item {
+    padding: 15px 0; 
+    border-bottom: 1px solid var(--border-light);
+    transition: none;
+    transform: none !important; 
+    box-shadow: none !important;
+    opacity: 1; 
+    animation: none !important; 
+    align-items: flex-start; 
+}
+
+.dark-mode .insight-item {
+    border-bottom-color: var(--border-dark);
+    background: none !important;
+}
+
+/* Icon Coloration remains */
+.insight-icon.icon-data { color: #f59e0b; }
+.insight-icon.icon-tech { color: #3b82f6; }
+.insight-icon.icon-career { color: #10b981; }
+.insight-icon.icon-strategy { color: #7c3aed; }
+
+
+/* --- Item Title (e.g., "Tier-2 Internship Access & Relocation") --- */
+.insight-content strong {
+    font-size: 17px; 
+    font-weight: 700;
+    letter-spacing: 0.01em; 
+    color: var(--text-light); 
+    display: flex; 
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 8px; 
+    background-color: transparent !important; 
+    padding: 0 !important;
+}
+.dark-mode .insight-content strong {
+    color: var(--text-dark); 
+}
+
+/* --- DETAIL TEXT: The body of the content --- */
+.insight-content .detail-text {
+    font-size: 13px; 
+    color: #333c53; 
+    line-height: 1.5;
+    margin: 6px 0 22px 0; 
+}
+.dark-mode .insight-content .detail-text {
+    color: #cccccc; 
+}
+
+/* --- TITLE PULSE ANIMATION --- */
+@keyframes title-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.pulse-title {
+    animation: title-pulse 0.4s ease-out 1;
+    display: inline-block;
+}
+/* ------------------------------------------- */
+
+
+/* ------------------ ACTION TIP STYLING (CRITICAL) ------------------ */
+
+.insight-content .action-tip-highlight {
+    font-size: 13px;
+    font-weight: 600; 
+    
+    background: #93c5fd; 
+    color: var(--text-light); 
+    
+    padding: 12px 15px !important; 
+    border-radius: 12px !important; 
+    margin-top: 15px !important; 
+    margin-bottom: 18px !important; 
+    
+    display: block;
+    word-break: break-word;
+    line-height: 1.5;
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2); 
+    animation: pulse-shadow 2.5s infinite;
+}
+
+/* Custom styling for the "**Action:**" prefix inside the tip */
+.insight-content .action-tip-highlight strong {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #5b21b6; 
+    background: none !important;
+    padding: 0 !important;
+    display: inline !important;
+}
+
+.dark-mode .insight-content .action-tip-highlight {
+    background: #4c1d95; 
+    color: #e0f2fe !important; 
+    box-shadow: 0 2px 10px rgba(147, 51, 234, 0.3);
+}
+.dark-mode .insight-content .action-tip-highlight strong {
+    color: #fff !important; 
+}
+
+@keyframes pulse-shadow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(124, 58, 237, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+    }
+}
+
+/* ------------------ SOURCE BUTTON ALIGNMENT (FINAL FIX) ------------------ */
+
+.link-button-row {
+    margin-top: 15px; 
+    display: flex;
+    justify-content: flex-start; 
+}
+
+.insight-content .link-button {
+    display: inline-flex !important; 
+    align-items: center;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    background-color: var(--info) !important;
+    color: #fff !important;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.insight-content .link-button:hover {
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+/* ---------------------------------------------------------------------------------- */
+/* --- TRIAL BUTTON ALIGNMENT FIX (PRESERVED) --- */
+/* ---------------------------------------------------------------------------------- */
+
+.trial-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    gap: 10px;
+}
+
+/* General style for trial action buttons (overrides default button style slightly) */
+.trial-actions-row button {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+}
+
+/* Specific style for the Back button */
+.trial-actions-row .back-license-btn {
+    background: #e5e7eb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    flex-grow: 0;
+    min-width: 90px;
+}
+.trial-actions-row .back-license-btn:hover {
+    background: #d1d5db;
+    transform: translateY(-1px);
+}
+.dark-mode .trial-actions-row .back-license-btn {
+    background: #333;
+    color: #eee;
+    border-color: #555;
+}
+.dark-actions-row .back-license-btn:hover {
+    background: #444;
+}
+
+
+/* Specific style for the Pay/Unlock button */
+.trial-actions-row .pay-unlock-btn {
+    background-color: var(--success);
+    color: #fff;
+    border: none;
+    flex-grow: 0;
+    min-width: 150px;
+}
+.trial-actions-row .pay-unlock-btn:hover {
+    background-color: var(--success-hover);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* ---------------------------------------------------------------------------------- */
+/* --- OLD ATS SCORE VISUALIZATION STYLES (Retained but not used by JS now) --- */
+/* ---------------------------------------------------------------------------------- */
+
+.score-gauge-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 20px 0;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 15px;
+}
+.dark-mode .score-gauge-wrapper {
+    border-bottom-color: var(--border-dark);
+}
+
+.score-dial {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(var(--hover-light) 0deg, var(--hover-light) 360deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.5s ease-in-out; 
+}
+
+/* Inner white circle to create the "dial" effect */
+.score-dial::before {
+    content: '';
+    position: absolute;
+    width: 120px; 
+    height: 120px;
+    border-radius: 50%;
+    background: var(--card-light);
+    z-index: 1;
+}
+.dark-mode .score-dial::before {
+    background: var(--card-dark);
+}
+
+.score-number {
+    position: relative;
+    font-size: 32px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--text-light);
+    z-index: 2;
+    transition: color 0.5s ease;
+}
+.dark-mode .score-number {
+    color: var(--text-dark);
+}
+
+.score-summary-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+    padding: 0 10px;
+}
+.dark-mode .score-summary-text {
+    color: #9333ea; 
+}
+
+
+/* --- DYNAMIC COLOR CLASSES (Set by JavaScript) --- */
+
+/* Less than 50% - Danger */
+.score-gauge-danger {
+    color: var(--danger);
+}
+
+/* 50% to 75% - Warning */
+.score-gauge-warning {
+    color: var(--warning);
+}
+
+/* 75% and above - Success */
+.score-gauge-success {
+    color: var(--success);
+}
+
+/* Apply color to the text inside the dial */
+.score-gauge-danger .score-number { color: var(--danger); }
+.score-gauge-warning .score-number { color: var(--warning); }
+.score-gauge-success .score-number { color: var(--success); }
+
+/* ---------------------------------------------------------------------------------- */
+/* --- NEW STYLES: Premium Polished Metric Block (ATS Report) --- */
+/* ---------------------------------------------------------------------------------- */
+
+.dual-score-header {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.dark-mode .dual-score-header {
+    border-bottom-color: var(--border-dark);
+}
+
+.score-card-summary {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    background: var(--hover-light);
+}
+.dark-mode .score-card-summary {
+    background: var(--hover-dark);
+}
+
+.score-card-summary p {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+}
+.dark-mode .score-card-summary p {
+    color: #a0a0a0;
+}
+
+.score-value-lg {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px; 
+    font-weight: 800;
+    line-height: 1;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.score-ats-value { color: var(--primary); }
+.score-recruiter-value { color: var(--success-darker); }
+
+/* Status coloring for the score text itself */
+.score-status-critical .score-value-lg { color: var(--danger) !important; }
+.score-status-warning .score-value-lg { color: var(--warning) !important; }
+.score-status-good .score-value-lg { color: var(--success) !important; }
+
+
+/* Segmented Tab Control (NEW for ATS Report) */
+.segmented-control-container {
+    width: 100%;
+    margin: 15px 0 20px 0;
+    padding: 0 10px;
+}
+
+.segmented-control {
+    display: flex;
+    background: var(--hover-light);
+    border-radius: 12px;
+    padding: 5px;
+    border: 1px solid var(--border-light);
+}
+.dark-mode .segmented-control {
+    background: var(--hover-dark);
+    border-color: var(--border-dark);
+}
+
+.segmented-control .tab-btn {
+    flex-grow: 1;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-light);
+    border: none;
+    transition: background 0.2s, color 0.2s;
+    transform: none;
+    cursor: pointer;
+}
+.dark-mode .segmented-control .tab-btn {
+    color: var(--text-dark);
+}
+
+.segmented-control .tab-btn:hover:not(.active) {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.segmented-control .tab-btn.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.dark-mode .segmented-control .tab-btn.active {
+    background: var(--primary-hover);
+}
+
+
+/* Metric Block Styling (Updated for aesthetic video look) */
+#aiOptimizationOutputCard .ai-report-card {
+    /* Main card container for the report */
+    border: 1px solid var(--border-light) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important; 
+    padding: 15px !important;
+}
+.dark-mode #aiOptimizationOutputCard .ai-report-card {
+    border: 1px solid var(--border-dark) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important; 
+}
+
+.ai-report-details {
+    /* Retains vertical stack for metric blocks */
+    display: flex;
+    flex-direction: column;
+    gap: 12px !important;
+    padding: 0;
+}
+
+.ai-metric-block-video {
+    /* This creates the card background and internal padding/positioning */
+    padding: 15px 15px 15px 25px; 
+    border-radius: 12px; 
+    background: var(--card-light);
+    border: 1px solid var(--border-light);
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.02); 
+    position: relative;
+    overflow: hidden; 
+    
+    display: grid;
+    grid-template-columns: 1fr; 
+    transition: all 0.2s ease-in-out;
+}
+.dark-mode .ai-metric-block-video {
+    background: #252525; 
+    border: 1px solid #4a4a4a;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.03); 
+}
+
+/* Hover Effect: Lifts and highlights the active metric card */
+.ai-metric-block-video:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15); 
+    z-index: 10;
+}
+
+
+/* 1. Colored Border */
+.ai-metric-block-video::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px; 
+    border-radius: 12px 0 0 12px;
+}
+
+/* Status-based colors for the vertical bar */
+.status-border-critical::before { background-color: var(--danger); }
+.status-border-warning::before { background-color: var(--warning); }
+.status-border-good::before { background-color: var(--success); }
+.status-border-neutral::before { background-color: var(--not-applied); }
+
+
+/* 2. Header Row (Metric Label and Status Tag) */
+.metric-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0; 
+    border-bottom: 1px solid var(--border-light); 
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+.dark-mode .metric-header-row {
+    border-bottom-color: var(--border-dark);
+}
+
+.metric-label-video {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px; 
+    font-weight: 700;
+    color: var(--text-light);
+    flex-grow: 1;
+    line-height: 1.2;
+    padding-right: 15px; 
+}
+.dark-mode .metric-label-video {
+    color: var(--text-dark);
+}
+
+/* 3. Status Tag (Floating on Right) - Polished Look */
+.status-tag-video {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px; 
+    color: #fff;
+    white-space: nowrap;
+    line-height: 1.2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); 
+    border: 1px solid transparent; 
+    flex-shrink: 0; 
+}
+
+.status-good { 
+    background-color: var(--success); 
+    border-color: #108c48; 
+}
+.status-warning { 
+    background-color: var(--warning); 
+    border-color: #d88907;
+}
+.status-critical { 
+    background-color: var(--danger); 
+    border-color: #c93d3d;
+}
+.status-neutral { 
+    background-color: var(--not-applied); 
+    border-color: #556276;
+}
+
+/* 4. Feedback Content (Full Width) */
+.metric-feedback-content {
+    font-size: 13px;
+    color: #4a5568; 
+    line-height: 1.7; 
+    margin-top: -5px;
+}
+.dark-mode .metric-feedback-content {
+    color: #b0b8c4;
+}
+
+/* Highlight strong text inside the feedback (the keywords) */
+.metric-feedback-content strong {
+    font-weight: 700;
+    color: var(--primary-hover); 
+}
+.dark-mode .metric-feedback-content strong {
+    color: #60a5fa;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* 泙 NEW STYLES FOR JSON-DRIVEN DIAGNOSTIC FACTORS (CRITICAL) 泙 */
+/* ---------------------------------------------------------------------- */
+
+/* Style for the nested Audit Table (Quantifiable Achievements) */
+.audit-table {
+    margin-top: 10px;
+    font-size: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+.dark-mode .audit-table {
+    border-color: var(--border-dark);
+}
+
+/* Header Row (Original vs Rewrite) */
+.audit-table > div:first-child {
+    background: var(--hover-light);
+    font-weight: 600;
+    padding: 8px;
+}
+.dark-mode .audit-table > div:first-child {
+    background: var(--hover-dark);
+}
+
+
+.audit-table > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 10px;
+    border-top: 1px solid var(--border-light);
+}
+.dark-mode .audit-table > div {
+    border-top-color: var(--border-dark);
+}
+
+.audit-table .original {
+    color: var(--danger); /* Original low-scoring sentence */
+}
+.audit-table .rewrite {
+    color: var(--success); /* AI-suggested improvement */
+}
+
+/* Resource Tip Container */
+.resource-tip {
+    margin-top: 15px; 
+    padding-top: 10px; 
+    border-top: 1px dashed var(--border-light);
+}
+.dark-mode .resource-tip {
+    border-top-color: var(--border-dark);
+}
+
+
+/* Micro-Feedback Loop */
+.micro-feedback {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    margin-top: 5px;
+    color: var(--text-light);
+}
+.dark-mode .micro-feedback {
+    color: var(--text-dark);
+}
+
+.micro-feedback .feedback-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+    line-height: 1;
+    transform: none; /* Override standard button hover transformation */
+    min-width: unset;
+    height: auto;
+}
+
+.micro-feedback .feedback-btn:hover {
+    opacity: 0.8;
+}
+
+.micro-feedback .feedback-yes {
+    background: var(--success);
+}
+.micro-feedback .feedback-no {
+    background: var(--danger);
+}
